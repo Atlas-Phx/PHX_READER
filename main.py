@@ -32,15 +32,17 @@ if __name__ == '__main__':
     ALT=META.RECEIVER_CORD['ALT']
     # EXAMPLE:
     # SURVEY METADATA - SURVEY INFORMATION
-    print('CREW=', META.SURVEY_INFO['OPERATORS'])
-    print('COMPANY=',META.SURVEY_INFO['COMPANY'])
-    print('SITE NAME=',META.SURVEY_INFO['SITE'])
+    # print('CREW=', META.SURVEY_INFO['OPERATORS'])
+    # print('COMPANY=',META.SURVEY_INFO['COMPANY'])
+    # print('SITE NAME=',META.SURVEY_INFO['SITE'])
     # CHECK 'import_recmeta-GetSurveyInfo' FOR OTHER METADATA INFORMATION
 
     # EXAMPLE:
     # CHANNEL INFORMATION SUCH AS DIPOLE LENGTHS AND SENSOR SERIAL NUMBERS, GAINS ETC
     CHANNELS=META.Channels()
-    print(CHANNELS['E_CH']['DIPOLE_LENGTH'])    
+    SAMPLE=META.DECIMATION()
+    
+    # print(CHANNELS['E_CH']['DIPOLE_LENGTH'])    
     # CHECK 'import_recmeta-Channels' FOR OTHER METADATA INFORMATION
     
     TS=utils5C.ReadTs(path)
@@ -56,10 +58,10 @@ if __name__ == '__main__':
     """
     file_type='td_150'
     TS_td_150,SENSOR_CALIBRATION=TS.ImportTsData(file_type)
-    
+    file_type='td_15024k'
     # EXAMPLE:
     # ACCESS ex (E1) TS DATA AS FOLLOWS
-    print(TS_td_150['ex'])
+    # print(TS_td_150['ex'])
     # EXAMPLE:
     # ACCESS GENERIC CAL 
-    print(SENSOR_CALIBRATION['hx'])
+    # print(SENSOR_CALIBRATION['hx'])

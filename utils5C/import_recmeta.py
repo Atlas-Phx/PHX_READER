@@ -11,6 +11,7 @@ class ParseMetaData:
         self.GetSurveyInfo()
         self.GetCoordinates()
         self.Channels()
+        self.DECIMATION()
     def GetCoordinates(self):
         self.RECEIVER_CORD={}
         self.RECEIVER_CORD['LAT']=self.metadata['timing']['gps_lat']
@@ -28,6 +29,20 @@ class ParseMetaData:
         self.SURVEY_INFO['Rec_Stop']=self.metadata['stop']
         # self.SURVEY_INFO['TIMEZONE']=self.metadata['layout']['timezone']           # ONLY IN empower_recmeta.json
         return(self.SURVEY_INFO)
+    def DECIMATION(self):
+        self.SAMPLING={}
+        self.SAMPLING['divider_id']=self.metadata['decimation']['divider_id']
+        self.SAMPLING['interleave_lev0']=self.metadata['decimation']['interleave_lev0']
+        self.SAMPLING['interleave_lev1']=self.metadata['decimation']['interleave_lev1']
+        CONT=self.metadata['decimation']['version_1']
+        self.SAMPLING['interleave_96k']=CONT['interleave_96k']
+        self.SAMPLING['interleave_24k']=CONT['interleave_24k']
+        self.SAMPLING['interleave_2400']=CONT['interleave_2400']
+        self.SAMPLING['interleave_150']=CONT['interleave_150']
+        self.SAMPLING['interleave_30']=CONT['interleave_30']
+        return(self.SAMPLING)
+
+
     def Channels(self):
         Active_Channels=len(self.metadata['chconfig']['chans'])
         All_Channels=self.metadata['chconfig']['chans']
