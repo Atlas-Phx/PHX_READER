@@ -40,8 +40,8 @@ if __name__ == '__main__':
     # EXAMPLE:
     # CHANNEL INFORMATION SUCH AS DIPOLE LENGTHS AND SENSOR SERIAL NUMBERS, GAINS ETC
     CHANNELS=META.Channels()
-    SAMPLE=META.DECIMATION()
-    
+    # SAMPLE=META.DECIMATION()
+    # print(SAMPLE['divider_id'])
     # print(CHANNELS['E_CH']['DIPOLE_LENGTH'])    
     # CHECK 'import_recmeta-Channels' FOR OTHER METADATA INFORMATION
     
@@ -57,8 +57,9 @@ if __name__ == '__main__':
     -------------------------------------------------------------------------------------------
     """
     file_type='td_150'
-    TS_td_150,SENSOR_CALIBRATION=TS.ImportTsData(file_type)
+    TS_td_150,SENSOR_CALIBRATION=TS.ReadContinuousTsData(file_type)
     file_type='td_15024k'
+    print(TS.Import_TS_Data())
     # EXAMPLE:
     # ACCESS ex (E1) TS DATA AS FOLLOWS
     # print(TS_td_150['ex'])

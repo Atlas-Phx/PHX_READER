@@ -13,12 +13,13 @@ class ReadTs():
         self.path=TS_FOLDER
         META=utils5C.ParseMetaData(self.path)
         CH_DATA=META.Channels()
+        self.SAMPLING=META.DECIMATION()
         self.ch_index=CH_DATA['CH_INDEX']
         self.channels=CH_DATA['CHANNELS']
         self.Sensor_Type=CH_DATA['H_CH']['SENSOR_TYPE']
         self.ImportGenericCalibration()
         self.ListFiles()
-        
+        # self.Import_TS_Data
         
         
         # self.FileType='td_150'
@@ -50,8 +51,17 @@ class ReadTs():
             CC=[x for _,x in BB ]
             self.FILE_LIST[self.channels[i]]=CC
         return(self.FILE_TYPE)
+    # TODO: ADD ANOTHER FUNCTION HERE TO SELECT WHICH DATA TYPE WILL BE READ AND THEN MERGE THEM, MAKE CONTINUOUS and SPARSE DIFFERENT READER
+    def Import_TS_Data(self):
+        if self.SAMPLING['interleave_150']==1:
+            FileType="td_150"
+        # if self.SAMPLING['divider_id']==2 & self.SAMPLING['divider_lev0']==2:
+        #     FileType="td_150"
         
-    def ImportTsData(self,FileType):
+        
+
+
+    def ReadContinuousTsData(self,FileType):
         
         
         TS_DATA={}
