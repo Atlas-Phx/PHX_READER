@@ -13,13 +13,19 @@ class ReadTs():
         self.path=TS_FOLDER
         META=utils5C.ParseMetaData(self.path)
         CH_DATA=META.Channels()
+        # self.File_Type=''
+        self.START=0
+        self.STOP=0
         self.SAMPLING=META.DECIMATION()
         self.ch_index=CH_DATA['CH_INDEX']
         self.channels=CH_DATA['CHANNELS']
         self.Sensor_Type=CH_DATA['H_CH']['SENSOR_TYPE']
+        
         self.ImportGenericCalibration()
         self.ListFiles()
-        # self.Import_TS_Data
+        self.Import_TS_Data()
+        self.ReadContinuousTsData()
+        
         
         
         # self.FileType='td_150'
@@ -28,12 +34,12 @@ class ReadTs():
         
         
         # GET FILE TYPES
-        self.FILE_TYPE=set()
+        # self.FILE_TYPE=set()
         
         for fname in os.listdir(self.path+"/"+str(self.ch_index[self.channels[0]])):
             if "." in fname:
                 extension=fname.split(".")[-1]
-                self.FILE_TYPE.add(extension)
+                # self.FILE_TYPE.add(extension)
         
         # GET FLIST (SORTED BY HEX)
         self.FILE_LIST={}
@@ -50,18 +56,22 @@ class ReadTs():
             BB=sorted(AA)        
             CC=[x for _,x in BB ]
             self.FILE_LIST[self.channels[i]]=CC
-        return(self.FILE_TYPE)
+        
     # TODO: ADD ANOTHER FUNCTION HERE TO SELECT WHICH DATA TYPE WILL BE READ AND THEN MERGE THEM, MAKE CONTINUOUS and SPARSE DIFFERENT READER
     def Import_TS_Data(self):
+        START=0
+        STOP=0
         if self.SAMPLING['interleave_150']==1:
-            FileType="td_150"
+            self.File_Type="td_150"
+
+            self.ReadContinuousTsData()        
         # if self.SAMPLING['divider_id']==2 & self.SAMPLING['divider_lev0']==2:
         #     FileType="td_150"
         
         
 
 
-    def ReadContinuousTsData(self,FileType):
+    def ReadContinuousTsData(self):
         
         
         TS_DATA={}
@@ -79,12 +89,13 @@ class ReadTs():
                 #     newfilepath=os.path.join(self.path+'/'+'AA'+'/', newfilename+'.'+FileType)
                 #     os.rename(oldfilepath, newfilepath)
                 '''   
-                parsed_data=DecimatedContinuousReader(ch_path+file+"."+FileType)
+                parsed_data=DecimatedContinuousReader(ch_path+file+"."+self.File_Type)
                 sample_rate=parsed_data.header_info["sample_rate"]
                 data.extend(parsed_data.read_data(sample_rate*60*6))
                
             TS_DATA[self.channels[i]]=xr.DataArray(data)
-       
+        print(TS_DATA)
+
         ## USE LATER FOR SAVING IN H5 FORMAT
         # h5file=os.path.join(self.path,'TS.h5')
         # with h5py.File(h5file, 'w') as f:
@@ -94,15 +105,15 @@ class ReadTs():
       
         # ASSIGN THE COMPONENTS - READ FROM A PARAMETER FILE AFTER - CONSIDER 8A CHANNEL RECEIVERS TOO
         
-        TS_DATA['ex']=TS_DATA.pop('E1')
-        TS_DATA['ey']=TS_DATA.pop('E2')
-        TS_DATA['hx']=TS_DATA.pop('H1')
-        TS_DATA['hy']=TS_DATA.pop('H2')
-        TS_DATA['hz']=TS_DATA.pop('H3')
+        # TS_DATA['ex']=TS_DATA.pop('E1')
+        # TS_DATA['ey']=TS_DATA.pop('E2')
+        # TS_DATA['hx']=TS_DATA.pop('H1')
+        # TS_DATA['hy']=TS_DATA.pop('H2')
+        # TS_DATA['hz']=TS_DATA.pop('H3')
         
-        self.Cal_Data['hx']=self.Cal_Data.pop('H1')
-        self.Cal_Data['hy']=self.Cal_Data.pop('H2')
-        self.Cal_Data['hz']=self.Cal_Data.pop('H3')
+        # self.Cal_Data['hx']=self.Cal_Data.pop('H1')
+        # self.Cal_Data['hy']=self.Cal_Data.pop('H2')
+        # self.Cal_Data['hz']=self.Cal_Data.pop('H3')
         
         return(TS_DATA,self.Cal_Data)
     

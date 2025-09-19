@@ -56,10 +56,10 @@ if __name__ == '__main__':
     - CLASS RETURNS TS DATA AND GENERIC CAIBRATIONS - SENSOR TYPE IS READ FROM RECMETA AND GENERIC CAL IS SELECTED AUTOMATICALLY
     -------------------------------------------------------------------------------------------
     """
-    file_type='td_150'
-    TS_td_150,SENSOR_CALIBRATION=TS.ReadContinuousTsData(file_type)
-    file_type='td_15024k'
-    print(TS.Import_TS_Data())
+    # file_type='td_150'
+    # TS_td_150,SENSOR_CALIBRATION=TS.ReadContinuousTsData(file_type)
+    # file_type='td_15024k'
+    # print(TS.Import_TS_Data())
     # EXAMPLE:
     # ACCESS ex (E1) TS DATA AS FOLLOWS
     # print(TS_td_150['ex'])
