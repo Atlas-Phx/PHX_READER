@@ -14,16 +14,17 @@ class ReadTs():
         META=utils5C.ParseMetaData(self.path)
         CH_DATA=META.Channels()
         # self.File_Type=''
-        self.START=0
-        self.STOP=0
+        
         self.SAMPLING=META.DECIMATION()
         self.ch_index=CH_DATA['CH_INDEX']
         self.channels=CH_DATA['CHANNELS']
         self.Sensor_Type=CH_DATA['H_CH']['SENSOR_TYPE']
-        
         self.ImportGenericCalibration()
+        
         self.ListFiles()
+        
         self.Import_TS_Data()
+        
         self.ReadContinuousTsData()
         
         
@@ -94,7 +95,7 @@ class ReadTs():
                 data.extend(parsed_data.read_data(sample_rate*60*6))
                
             TS_DATA[self.channels[i]]=xr.DataArray(data)
-        print(TS_DATA)
+        
 
         ## USE LATER FOR SAVING IN H5 FORMAT
         # h5file=os.path.join(self.path,'TS.h5')
@@ -111,9 +112,11 @@ class ReadTs():
         # TS_DATA['hy']=TS_DATA.pop('H2')
         # TS_DATA['hz']=TS_DATA.pop('H3')
         
-        # self.Cal_Data['hx']=self.Cal_Data.pop('H1')
+        # print(self.Cal_Data)
+       
         # self.Cal_Data['hy']=self.Cal_Data.pop('H2')
         # self.Cal_Data['hz']=self.Cal_Data.pop('H3')
+        # self.Cal_Data['hx']=self.Cal_Data.pop('H1')
         
         return(TS_DATA,self.Cal_Data)
     
@@ -152,6 +155,7 @@ class ReadTs():
         # print(self.Sensor_Type.keys())
         
         for key in self.Sensor_Type.keys():
+            print(key)
             if self.Sensor_Type[key]=='MTC-185':
                 self.Cal_Data[key]=CAL_MTC185U
             if key=='MTC-155':
