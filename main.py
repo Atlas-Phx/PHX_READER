@@ -41,6 +41,7 @@ if __name__ == '__main__':
     # CHANNEL INFORMATION SUCH AS DIPOLE LENGTHS AND SENSOR SERIAL NUMBERS, GAINS ETC
     CHANNELS=META.Channels()
     print(CHANNELS['E_CH']['DIPOLE_LENGTH'])    
+    print(CHANNELS['H_CH']['SENSOR_SERIAL'])    
     # CHECK 'import_recmeta-Channels' FOR OTHER METADATA INFORMATION
     
     TS=utils5C.ReadTs(path)

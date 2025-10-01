@@ -43,7 +43,7 @@ class ParseMetaData:
         for i in range(0,Active_Channels):
             if All_Channels[i]['on']==1 and All_Channels[i]['ty']=="M":
                 self.MAG_TYPE[All_Channels[i]['tag']]=All_Channels[i]['type_name']
-                self.MAG_SERIAL[All_Channels[i]['tag']]=All_Channels[i]['serial_detected']
+                self.MAG_SERIAL[All_Channels[i]['tag']]=All_Channels[i]['serial']
                 self.MAG_GAIN[All_Channels[i]['tag']]=All_Channels[i]['ga']*All_Channels[i]['pg']
                 self.CHANNELS.append(All_Channels[i]['tag'])
                 self.CH_INDEX[MAP[i]['tag']]=MAP[i]['idx']
