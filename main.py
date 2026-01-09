@@ -60,7 +60,7 @@ if __name__ == '__main__':
     
     # EXAMPLE:
     # ACCESS ex (E1) TS DATA AS FOLLOWS
-    print(TS_td_150['ex'])
+    print(TS_td_150['H1'])
     # EXAMPLE:
     # ACCESS GENERIC CAL 
-    print(SENSOR_CALIBRATION['hx'])
+    print(SENSOR_CALIBRATION['H1'])

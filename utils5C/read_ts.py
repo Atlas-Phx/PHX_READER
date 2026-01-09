@@ -84,15 +84,15 @@ class ReadTs():
       
         # ASSIGN THE COMPONENTS - READ FROM A PARAMETER FILE AFTER - CONSIDER 8A CHANNEL RECEIVERS TOO
         
-        TS_DATA['ex']=TS_DATA.pop('E1')
-        TS_DATA['ey']=TS_DATA.pop('E2')
-        TS_DATA['hx']=TS_DATA.pop('H1')
-        TS_DATA['hy']=TS_DATA.pop('H2')
-        TS_DATA['hz']=TS_DATA.pop('H3')
+        # TS_DATA['ex']=TS_DATA.pop('E1')
+        # TS_DATA['ey']=TS_DATA.pop('E2')
+        # TS_DATA['hx']=TS_DATA.pop('H1')
+        # TS_DATA['hy']=TS_DATA.pop('H2')
+        # TS_DATA['hz']=TS_DATA.pop('H3')
         
-        self.Cal_Data['hx']=self.Cal_Data.pop('H1')
-        self.Cal_Data['hy']=self.Cal_Data.pop('H2')
-        self.Cal_Data['hz']=self.Cal_Data.pop('H3')
+        # self.Cal_Data['hx']=self.Cal_Data.pop('H1')
+        # self.Cal_Data['hy']=self.Cal_Data.pop('H2')
+        # self.Cal_Data['hz']=self.Cal_Data.pop('H3')
         
         return(TS_DATA,self.Cal_Data)
     
