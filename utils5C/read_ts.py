@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import h5py
 import xarray as xr
 import utils5C
+import time
 class ReadTs():
     def __init__(self,TS_FOLDER):
        
@@ -49,51 +50,46 @@ class ReadTs():
             BB=sorted(AA)        
             CC=[x for _,x in BB ]
             self.FILE_LIST[self.channels[i]]=CC
+            
         return(self.FILE_TYPE)
         
     def ImportTsData(self,FileType):
-        
-        
-        TS_DATA={}
-        
-        for i in range(0,len(self.channels)): 
-            ch_path=(self.path+"/"+str(self.ch_index[self.channels[i]])+"/")
-            
-            data=[]
-            for file in self.FILE_LIST[self.channels[i]]:
-                '''NOT RELATED TO THE CODE, USED FOR FIXING CORRUPTED RECORDING
-                # if str(self.ch_index[self.channels[i]])=='0':
-                #     oldfilepath=os.path.join(ch_path, (file+'.'+FileType))
-                #     print(oldfilepath)
-                #     newfilename=file.replace("_0_","_1_")  
-                #     newfilepath=os.path.join(self.path+'/'+'AA'+'/', newfilename+'.'+FileType)
-                #     os.rename(oldfilepath, newfilepath)
-                '''   
-                parsed_data=DecimatedContinuousReader(ch_path+file+"."+FileType)
-                sample_rate=parsed_data.header_info["sample_rate"]
-                data.extend(parsed_data.read_data(sample_rate*60*6))
-               
-            TS_DATA[self.channels[i]]=xr.DataArray(data)
-       
-        ## USE LATER FOR SAVING IN H5 FORMAT
-        # h5file=os.path.join(self.path,'TS.h5')
-        # with h5py.File(h5file, 'w') as f:
-        #     ts = f.create_group(f'ts_{sample_rate}')
-        #     for channel in channels:
-        #         ts.create_dataset(channel,data=TS_DATA[channel])
-      
-        # ASSIGN THE COMPONENTS - READ FROM A PARAMETER FILE AFTER - CONSIDER 8A CHANNEL RECEIVERS TOO
-        
-        # TS_DATA['ex']=TS_DATA.pop('E1')
-        # TS_DATA['ey']=TS_DATA.pop('E2')
-        # TS_DATA['hx']=TS_DATA.pop('H1')
-        # TS_DATA['hy']=TS_DATA.pop('H2')
-        # TS_DATA['hz']=TS_DATA.pop('H3')
-        
-        # self.Cal_Data['hx']=self.Cal_Data.pop('H1')
-        # self.Cal_Data['hy']=self.Cal_Data.pop('H2')
-        # self.Cal_Data['hz']=self.Cal_Data.pop('H3')
-        
+        TS_DATA = {}
+
+        for ch_idx in range(len(self.channels)):
+            ch_name = self.channels[ch_idx]
+            ch_path = self.path + "/" + str(self.ch_index[ch_name]) + "/"
+
+            data = []
+
+            for file in self.FILE_LIST[ch_name]:
+                parsed_data = DecimatedContinuousReader(ch_path + file + "." + FileType)
+                sample_rate = parsed_data.header_info["sample_rate"]
+                frag = parsed_data.header_info["frag_period"]
+
+                # print(f"Reading file: {file}")
+
+                for frag_idx in range(frag):
+                    try:
+                        chunk = parsed_data.read_data(sample_rate)
+                    except ValueError:
+                # file already closed / EOF reached unexpectedly
+                        break
+
+                    if chunk is None:
+                        break
+
+                    if len(chunk) == 0:
+                        break
+
+                    data.extend(chunk)
+
+            # if the last read is shorter than sample_rate, it means EOF
+                    if len(chunk) < sample_rate:
+                        break
+
+            TS_DATA[ch_name] = xr.DataArray(data)
+           
         return(TS_DATA,self.Cal_Data)
     
     def ImportGenericCalibration(self):
